@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SICOKRO - Sistem Informasi Yayasan Cokroaminoto</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Basic component styles (avoid Tailwind @apply since CDN can't process it) */
+        .card { background: #ffffff; border-radius: 0.5rem; box-shadow: 0 4px 8px rgba(0,0,0,0.04); padding: 1.5rem; }
+        .btn-primary { background: #2563eb; color: #fff; padding: .5rem 1rem; border-radius: .375rem; transition: background .15s ease; }
+        .btn-primary:hover { background: #1e40af; }
+        .btn-secondary { background: #4b5563; color: #fff; padding: .5rem 1rem; border-radius: .375rem; transition: background .15s ease; }
+        .btn-secondary:hover { background: #374151; }
+        .btn-success { background: #16a34a; color: #fff; padding: .5rem 1rem; border-radius: .375rem; transition: background .15s ease; }
+        .btn-success:hover { background: #15803d; }
+        .btn-danger { background: #dc2626; color: #fff; padding: .5rem 1rem; border-radius: .375rem; transition: background .15s ease; }
+        .btn-danger:hover { background: #b91c1c; }
+        .form-input { width: 100%; padding: .5rem .75rem; border: 1px solid #d1d5db; border-radius: .375rem; outline: none; }
+        .form-input:focus { box-shadow: 0 0 0 4px rgba(37,99,235,0.08); }
+        .hidden { display: none; }
+        .status-badge { padding: .25rem .75rem; border-radius: 9999px; font-size: .875rem; font-weight: 500; }
+        .status-unpaid { background: #fecaca; color: #991b1b; }
+        .status-partial { background: #fef3c7; color: #92400e; }
+        .status-paid { background: #bbf7d0; color: #065f46; }
+        .status-pending { background: #f3f4f6; color: #374151; }
+        .status-confirmed { background: #bbf7d0; color: #065f46; }
+        /* Small utilities used in the page (kept minimal) */
+        .container { max-width: 1100px; margin-left: auto; margin-right: auto; }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Login Page -->
+    <div id="loginPage" class="min-h-screen flex items-center justify-center">
+        <div class="card max-w-md w-full mx-4">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold text-blue-800 mb-2">SICOKRO</h1>
+                <p class="text-gray-600">Sistem Informasi Yayasan Cokroaminoto</p>
+            </div>
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                    <input type="email" id="loginEmail" class="form-input" placeholder="email@example.com" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                    <input type="password" id="loginPassword" class="form-input" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-primary w-full">Login</button>
+            </form>
+            <div id="loginError" class="mt-4 p-3 bg-red-100 text-red-700 rounded hidden"></div>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="mainApp" class="hidden">
+        <!-- Header -->
+        <nav class="bg-blue-800 text-white shadow-lg">
+            <div class="container mx-auto px-4 py-4">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-4">
+                        <h1 class="text-2xl font-bold">SICOKRO</h1>
+                        <span id="userSchoolName" class="text-sm opacity-75"></span>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span id="userName" class="text-sm"></span>
+                        <button onclick="logout()" class="text-sm hover:underline">Logout</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Navigation -->
+        <div class="bg-white shadow">
+            <div class="container mx-auto px-4">
+                <div class="flex space-x-6 overflow-x-auto">
+                        <button onclick="showPage('dashboard', event)" class="nav-btn py-4 border-b-2 border-transparent hover:border-blue-600">Dashboard</button>
+                        <button onclick="showPage('tagihan', event)" class="nav-btn py-4 border-b-2 border-transparent hover:border-blue-600">Tagihan</button>
+                        <button onclick="showPage('pembayaran', event)" class="nav-btn py-4 border-b-2 border-transparent hover:border-blue-600">Pembayaran</button>
+                        <button onclick="showPage('aset', event)" class="nav-btn py-4 border-b-2 border-transparent hover:border-blue-600">Aset</button>
+                        <button onclick="showPage('rkas', event)" class="nav-btn py-4 border-b-2 border-transparent hover:border-blue-600">RKAS</button>
+                        <button onclick="showPage('laporan', event)" class="nav-btn py-4 border-b-2 border-transparent hover:border-blue-600">Laporan</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="container mx-auto px-4 py-8">
+            <!-- Dashboard -->
+            <div id="dashboardPage" class="page-content">
+                <h2 class="text-2xl font-bold mb-6">Dashboard</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="card bg-gradient-to-br from-blue-500 to-blue-600 text-white">
+                        <div class="text-sm opacity-90">Total Tagihan Bulan Ini</div>
+                        <div class="text-3xl font-bold mt-2" id="dashTotalTagihan">Rp 0</div>
+                    </div>
+                    <div class="card bg-gradient-to-br from-green-500 to-green-600 text-white">
+                        <div class="text-sm opacity-90">Total Terbayar</div>
+                        <div class="text-3xl font-bold mt-2" id="dashTotalPaid">Rp 0</div>
+                    </div>
+                    <div class="card bg-gradient-to-br from-yellow-500 to-yellow-600 text-white">
+                        <div class="text-sm opacity-90">Belum Lunas</div>
+                        <div class="text-3xl font-bold mt-2" id="dashUnpaid">Rp 0</div>
+                    </div>
+                    <div class="card bg-gradient-to-br from-red-500 to-red-600 text-white">
+                        <div class="text-sm opacity-90">Jatuh Tempo</div>
+                        <div class="text-3xl font-bold mt-2" id="dashOverdue">0</div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="card">
+                        <h3 class="text-lg font-bold mb-4">Tagihan Terbaru</h3>
+                        <div id="recentTagihan" class="space-y-3"></div>
+                    </div>
+                    <div class="card">
+                        <h3 class="text-lg font-bold mb-4">Pembayaran Pending</h3>
+                        <div id="pendingPayments" class="space-y-3"></div>
+                    </div>
+                </div>
+                <!-- Super Admin: Schools list -->
+                <div id="schoolsListContainer" class="hidden mt-8">
+                    <h3 class="text-lg font-bold mb-4">Sekolah di Bawah YPIC</h3>
+                    <div id="schoolsList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+                </div>
+            </div>
+
+            <!-- Tagihan Page -->
+            <div id="tagihanPage" class="page-content hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold">Manajemen Tagihan</h2>
+                    <button onclick="showCreateTagihanForm()" class="btn-primary">+ Buat Tagihan</button>
+                </div>
+
+                <!-- Filter -->
+                <div class="card mb-6">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Periode</label>
+                            <input type="month" id="filterPeriode" class="form-input" onchange="loadTagihan()">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Status</label>
+                            <select id="filterStatus" class="form-input" onchange="loadTagihan()">
+                                <option value="">Semua</option>
+                                <option value="unpaid">Belum Bayar</option>
+                                <option value="partial">Sebagian</option>
+                                <option value="paid">Lunas</option>
+                            </select>
+                        </div>
+                        <div class="flex items-end">
+                            <button onclick="loadTagihan()" class="btn-secondary w-full">Cari</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tagihan List -->
+                <div class="card">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Kode</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Siswa</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Deskripsi</th>
+                                    <th class="px-4 py-3 text-right text-sm font-medium text-gray-700">Jumlah</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Due Date</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Status</th>
+                                    <th class="px-4 py-3 text-center text-sm font-medium text-gray-700">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tagihanTableBody" class="divide-y divide-gray-200">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pembayaran Page -->
+            <div id="pembayaranPage" class="page-content hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold">Manajemen Pembayaran</h2>
+                    <button onclick="showCreatePembayaranForm()" class="btn-primary">+ Input Pembayaran</button>
+                </div>
+
+                <div class="card">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">ID</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Tagihan</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Metode</th>
+                                    <th class="px-4 py-3 text-right text-sm font-medium text-gray-700">Jumlah</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Bukti</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Status</th>
+                                    <th class="px-4 py-3 text-center text-sm font-medium text-gray-700">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pembayaranTableBody" class="divide-y divide-gray-200">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Aset Page -->
+            <div id="asetPage" class="page-content hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold">Manajemen Aset</h2>
+                    <button onclick="showCreateAsetForm()" class="btn-primary">+ Buat Aset</button>
+                </div>
+
+                <div class="card">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">ID</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Kode</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Nama</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Kategori</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Lokasi</th>
+                                    <th class="px-4 py-3 text-right text-sm font-medium text-gray-700">Nilai</th>
+                                    <th class="px-4 py-3 text-center text-sm font-medium text-gray-700">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="asetTableBody" class="divide-y divide-gray-200">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RKAS Page -->
+            <div id="rkasPage" class="page-content hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold">Manajemen RKAS</h2>
+                    <button onclick="showCreateRKASForm()" class="btn-primary">+ Buat RKAS</button>
+                </div>
+
+                <div class="card">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">ID</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Tahun</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Anggaran Total</th>
+                                    <th class="px-4 py-3 text-left text-sm font-medium text-gray-700">Realisasi Total</th>
+                                    <th class="px-4 py-3 text-center text-sm font-medium text-gray-700">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="rkasTableBody" class="divide-y divide-gray-200">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Laporan Page -->
+            <div id="laporanPage" class="page-content hidden">
+                <h2 class="text-2xl font-bold mb-6">Laporan Keuangan</h2>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="card">
+                        <h3 class="text-lg font-bold mb-4">Ringkasan Bulanan</h3>
+                        <div id="monthlySummary" class="space-y-3"></div>
+                    </div>
+                    <div class="card">
+                        <h3 class="text-lg font-bold mb-4">Top 5 Tunggakan</h3>
+                        <div id="topUnpaid" class="space-y-3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Create Tagihan -->
+    <div id="modalCreateTagihan" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <h3 class="text-xl font-bold mb-4">Buat Tagihan Baru</h3>
+            <form id="formCreateTagihan" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Kode Tagihan</label>
+                        <input type="text" name="kode_tagihan" class="form-input" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">ID Siswa (Opsional)</label>
+                        <input type="number" name="siswa_id" class="form-input">
+                    </div>
+                </div>
+
+                    <!-- modalSchoolDetail moved below so it's not nested inside modalCreateTagihan -->
+                <div>
+                    <label class="block text-sm font-medium mb-2">Deskripsi</label>
+                    <input type="text" name="deskripsi" class="form-input" value="Tagihan bulanan" required>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Jumlah (Rp)</label>
+                        <input type="number" name="jumlah" class="form-input" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Due Date</label>
+                        <input type="date" name="due_date" class="form-input" required>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Periode Mulai</label>
+                        <input type="date" name="periode_mulai" class="form-input" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Periode Selesai</label>
+                        <input type="date" name="periode_selesai" class="form-input" required>
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" onclick="closeModal('modalCreateTagihan')" class="btn-secondary">Batal</button>
+                    <button type="submit" class="btn-primary">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal School Detail -->
+    <div id="modalSchoolDetail" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg p-6 max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="schoolDetailTitle" class="text-xl font-bold">Detail Sekolah</h3>
+                <button onclick="closeModal('modalSchoolDetail')" class="btn-danger">Tutup</button>
+            </div>
+            <div id="schoolDetailContent">
+                <div id="schoolStats" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4"></div>
+                <div class="mt-4 mb-4">
+                    <div class="flex items-center space-x-2 mb-3">
+                        <h4 class="font-bold">Perencanaan & Anggaran</h4>
+                        <span class="text-sm text-gray-500">(RKJM • RKT • RKAS)</span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-3">
+                        <div class="card">
+                            <div class="font-medium mb-2">RKJM</div>
+                            <div id="rkjmList">Memuat...</div>
+                        </div>
+                        <div class="card">
+                            <div class="font-medium mb-2">RKT</div>
+                            <div id="rktList">Memuat...</div>
+                        </div>
+                        <div class="card">
+                            <div class="font-medium mb-2">RKAS</div>
+                            <div id="rkasList">Memuat...</div>
+                        </div>
+                    </div>
+                </div>
+                <h4 class="font-bold mb-2">Data Siswa</h4>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-4 py-2 text-left text-sm font-medium">Nama</th>
+                                <th class="px-4 py-2 text-left text-sm font-medium">Kelas</th>
+                                <th class="px-4 py-2 text-left text-sm font-medium">Tahun Masuk</th>
+                                <th class="px-4 py-2 text-right text-sm font-medium">Tunggakan</th>
+                                <th class="px-4 py-2 text-right text-sm font-medium">Kewajiban</th>
+                            </tr>
+                        </thead>
+                        <tbody id="schoolStudentsBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Plan Editor -->
+    <div id="modalPlanEditor" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg p-6 max-w-xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="planEditorTitle" class="text-xl font-bold">Edit Rencana</h3>
+                <button onclick="closePlanEditor()" class="btn-danger">Tutup</button>
+            </div>
+            <form id="formPlanEditor" class="space-y-4">
+                <input type="hidden" name="type" id="plan_type">
+                <input type="hidden" name="id" id="plan_id">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Tahun</label>
+                    <input type="text" id="plan_tahun" name="tahun" class="form-input">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Nama / Judul</label>
+                    <input type="text" id="plan_nama" name="nama" class="form-input" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Deskripsi</label>
+                    <textarea id="plan_deskripsi" name="deskripsi" class="form-input" rows="3"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Anggaran Total (Rp)</label>
+                    <input type="number" id="plan_anggaran" name="anggaran_total" class="form-input">
+                </div>
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" onclick="closePlanEditor()" class="btn-secondary">Batal</button>
+                    <button type="submit" class="btn-success">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Create Pembayaran -->
+    <div id="modalCreatePembayaran" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <h3 class="text-xl font-bold mb-4">Input Pembayaran</h3>
+            <form id="formCreatePembayaran" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-2">ID Tagihan (Opsional)</label>
+                    <input type="number" name="tagihan_id" class="form-input">
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Jumlah (Rp)</label>
+                        <input type="number" name="jumlah" class="form-input" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Metode Pembayaran</label>
+                        <select name="metode" class="form-input">
+                            <option>Transfer Bank</option>
+                            <option>Tunai</option>
+                            <option>EDC</option>
+                            <option>QRIS</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Metode Pembayaran</label>
+                    <select name="metode" class="form-input">
+                        <option>Transfer Bank</option>
+                        <option>Tunai</option>
+                        <option>EDC</option>
+                        <option>QRIS</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Bukti Pembayaran</label>
+                    <input type="file" name="bukti" class="form-input" accept="image/*,.pdf">
+                </div>
+                <div class="flex items-center">
+                    <input type="checkbox" name="auto_confirm" id="autoConfirm" class="mr-2">
+                    <label for="autoConfirm" class="text-sm">Konfirmasi otomatis (khusus bendahara)</label>
+                </div>
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" onclick="closeModal('modalCreatePembayaran')" class="btn-secondary">Batal</button>
+                    <button type="submit" class="btn-success">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Create Aset -->
+    <div id="modalCreateAset" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <h3 class="text-xl font-bold mb-4">Buat / Edit Aset</h3>
+            <form id="formCreateAset" class="space-y-4">
+                <input type="hidden" name="id" id="aset_id">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Kode Aset</label>
+                        <input type="text" name="kode_aset" class="form-input">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Nama</label>
+                        <input type="text" name="nama" class="form-input" required>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Kategori</label>
+                        <input type="text" name="kategori" class="form-input">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Lokasi</label>
+                        <input type="text" name="lokasi" class="form-input">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Kondisi</label>
+                        <input type="text" name="kondisi" class="form-input">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Nilai Perolehan</label>
+                        <input type="number" name="nilai_perolehan" class="form-input">
+                    </div>
+                </div>
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" onclick="closeModal('modalCreateAset')" class="btn-secondary">Batal</button>
+                    <button type="submit" class="btn-success">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Create RKAS -->
+    <div id="modalCreateRKAS" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4 max-h-[90vh] overflow-y-auto">
+            <h3 class="text-xl font-bold mb-4">Buat / Edit RKAS</h3>
+            <form id="formCreateRKAS" class="space-y-4">
+                <input type="hidden" name="id" id="rkas_id">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Tahun</label>
+                    <input type="number" name="tahun" class="form-input" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Anggaran Total</label>
+                    <input type="number" name="anggaran_total" class="form-input">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium mb-2">Realisasi Total</label>
+                    <input type="number" name="realisasi_total" class="form-input">
+                </div>
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" onclick="closeModal('modalCreateRKAS')" class="btn-secondary">Batal</button>
+                    <button type="submit" class="btn-success">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // State Management
+        const state = {
+            user: null,
+            sekolah_id: null,
+            currentPage: 'dashboard',
+            lastPlans: { rkjm: [], rkt: [], rkas: [] },
+            lastAset: [],
+            lastRKAS: [],
+            editingPlan: null
+        };
+
+        // API Base URL - point to the central API router in /Public
+        const API_BASE = '../Public/api.php';
+        console.log('API_BASE =', API_BASE);
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            document.getElementById('formCreateTagihan').addEventListener('submit', handleCreateTagihan);
+            document.getElementById('formCreatePembayaran').addEventListener('submit', handleCreatePembayaran);
+            // Aset & RKAS forms
+            const fa = document.getElementById('formCreateAset'); if (fa) fa.addEventListener('submit', handleCreateAset);
+            const fr = document.getElementById('formCreateRKAS'); if (fr) fr.addEventListener('submit', handleCreateRKAS);
+            // close modals with Escape
+            document.addEventListener('keydown', (ev) => {
+                if (ev.key === 'Escape') {
+                    closeModal('modalCreateTagihan');
+                    closeModal('modalCreatePembayaran');
+                }
+            });
+            // click outside modal to close
+            ['modalCreateTagihan','modalCreatePembayaran'].forEach(id => {
+                const wrap = document.getElementById(id);
+                if (wrap) {
+                    wrap.addEventListener('click', (ev) => {
+                        if (ev.target === wrap) closeModal(id);
+                    });
+                }
+            });
+        }
+
+        // Authentication
+        function checkAuth() {
+            const user = JSON.parse(localStorage.getItem('user') || 'null');
+            if (user) {
+                state.user = user;
+                state.sekolah_id = user.sekolah_id;
+                showMainApp();
+            }
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                const payload = new URLSearchParams();
+                payload.append('email', email);
+                payload.append('password', password);
+
+                const res = await fetch(API_BASE + '?action=login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: payload.toString()
+                });
+                const data = await res.json();
+                if (!res.ok) {
+                    showError('loginError', data.error || data.message || 'Login gagal');
+                    return;
+                }
+                // store user (API returns user)
+                const user = data.user;
+                localStorage.setItem('user', JSON.stringify(user));
+                state.user = user;
+                state.sekolah_id = user.sekolah_id;
+                showMainApp();
+            } catch (error) {
+                showError('loginError', 'Login gagal. Periksa koneksi dan coba lagi.');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('user');
+            state.user = null;
+            document.getElementById('mainApp').classList.add('hidden');
+            document.getElementById('loginPage').classList.remove('hidden');
+        }
+
+        function showMainApp() {
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+            document.getElementById('userName').textContent = state.user.nama;
+            document.getElementById('userSchoolName').textContent = state.user.sekolah_nama || '';
+            loadDashboard();
+        }
+
+        // Navigation
+        function showPage(pageName, e) {
+            document.querySelectorAll('.page-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(pageName + 'Page').classList.remove('hidden');
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('border-blue-600', 'text-blue-600');
+            });
+            if (e && (e.currentTarget || e.target)) {
+                const activeBtn = e.currentTarget || e.target;
+                activeBtn.classList.add('border-blue-600', 'text-blue-600');
+            }
+
+            state.currentPage = pageName;
+
+            if (pageName === 'dashboard') loadDashboard();
+            else if (pageName === 'tagihan') loadTagihan();
+            else if (pageName === 'pembayaran') loadPembayaran();
+            else if (pageName === 'laporan') loadLaporan();
+        }
+
+        // Dashboard
+        async function loadDashboard() {
+            // Render based on role
+            const role = state.user?.role || '';
+            // hide schools container by default
+            document.getElementById('schoolsListContainer').classList.add('hidden');
+            if (role === 'super_admin' || role === 'admin_yayasan') {
+                await loadYayasanDashboard();
+                return;
+            }
+
+            // Default school admin/dashboard (fallback to previous mocked overview)
+            try {
+                const statsRes = await fetch(API_BASE + '?action=dashboard_stats&sekolah_id=' + encodeURIComponent(state.sekolah_id));
+                const stats = await statsRes.json();
+                if (statsRes.ok && stats) {
+                    document.getElementById('dashTotalTagihan').textContent = formatRupiah(stats.totalTagihan || 0);
+                    document.getElementById('dashTotalPaid').textContent = formatRupiah(stats.totalPaid || 0);
+                    document.getElementById('dashUnpaid').textContent = formatRupiah(stats.unpaid || 0);
+                    document.getElementById('dashOverdue').textContent = stats.overdue || 0;
+                }
+
+                // load recent tagihan and pending payments via existing endpoints
+                const tagRes = await fetch(API_BASE + '?action=list_tagihan&sekolah_id=' + encodeURIComponent(state.sekolah_id));
+                const tagData = await tagRes.json();
+                const recent = (tagData.data || []).slice(0,5);
+                document.getElementById('recentTagihan').innerHTML = recent.map(t => `
+                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
+                        <div>
+                            <div class="font-medium">${t.kode_tagihan}</div>
+                            <div class="text-sm text-gray-600">${t.siswa_nama || '-'}</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-medium">${formatRupiah(t.jumlah)}</div>
+                            <span class="status-badge status-${t.status}">${t.status}</span>
+                        </div>
+                    </div>
+                `).join('') || '<p class="text-gray-500 text-center py-4">Tidak ada tagihan</p>';
+
+                const payRes = await fetch(API_BASE + '?action=list_pembayaran&sekolah_id=' + encodeURIComponent(state.sekolah_id));
+                const payData = await payRes.json();
+                const pending = (payData.data || []).filter(p => p.status === 'pending');
+                document.getElementById('pendingPayments').innerHTML = pending.map(p => `
+                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
+                        <div>
+                            <div class="font-medium">${p.metode || '-'}</div>
+                            <div class="text-sm text-gray-600">${p.bukti ? `<a href="../uploads/bukti_pembayaran/${p.bukti}" target="_blank" class="text-blue-600 hover:underline">Lihat Bukti</a>` : ''}</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-medium">${formatRupiah(p.jumlah)}</div>
+                            <button class="text-sm text-blue-600 hover:underline">Konfirmasi</button>
+                        </div>
+                    </div>
+                `).join('') || '<p class="text-gray-500 text-center py-4">Tidak ada pembayaran pending</p>';
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function loadYayasanDashboard() {
+            // show schools list
+            document.getElementById('schoolsListContainer').classList.remove('hidden');
+            const container = document.getElementById('schoolsList');
+            container.innerHTML = '<p class="text-gray-500">Memuat daftar sekolah...</p>';
+            try {
+                const res = await fetch(API_BASE + '?action=list_sekolah');
+                const data = await res.json();
+                const schools = data.data || [];
+                if (schools.length === 0) {
+                    container.innerHTML = '<p class="text-gray-500">Tidak ada sekolah terdaftar.</p>';
+                    return;
+                }
+                container.innerHTML = schools.map(s => `
+                    <div class="card">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <div class="font-medium">${s.nama}</div>
+                                <div class="text-sm text-gray-600">${s.alamat || s.jenjang || ''}</div>
+                            </div>
+                            <div class="text-right">
+                                <button class="btn-primary school-view-btn" data-id="${s.id}" data-name="${(s.nama||'').replace(/\"/g,'&quot;')}">Lihat Sekolah</button>
+                            </div>
+                        </div>
+                        <div class="mt-3 text-sm text-gray-600" id="school-stats-${s.id}">Memuat statistik...</div>
+                    </div>
+                `).join('');
+
+                // attach click listeners to buttons (avoid inline onclick quoting issues)
+                setTimeout(() => {
+                    const buttons = container.querySelectorAll('.school-view-btn');
+                    buttons.forEach(b => {
+                        b.addEventListener('click', () => {
+                            const id = b.dataset.id;
+                            const name = b.dataset.name || '';
+                            viewSchool(id, name);
+                        });
+                    });
+                }, 0);
+
+                // fetch stats for each school
+                for (const s of schools) {
+                    (async () => {
+                        try {
+                            const st = await fetch(API_BASE + '?action=dashboard_stats&sekolah_id=' + encodeURIComponent(s.id));
+                            const stj = await st.json();
+                            const el = document.getElementById('school-stats-' + s.id);
+                            if (el && stj) {
+                                el.innerHTML = `Tagihan: ${formatRupiah(stj.totalTagihan || 0)} • Terbayar: ${formatRupiah(stj.totalPaid || 0)} • Belum Lunas: ${formatRupiah(stj.unpaid || 0)}`;
+                            }
+                        } catch (e) { console.error(e); }
+                    })();
+                }
+            } catch (e) {
+                container.innerHTML = '<p class="text-red-600">Gagal memuat daftar sekolah</p>';
+            }
+        }
+
+        // Tagihan Management
+        async function loadTagihan() {
+            const periode = document.getElementById('filterPeriode')?.value || '';
+            const status = document.getElementById('filterStatus')?.value || '';
+            const tbody = document.getElementById('tagihanTableBody');
+            tbody.innerHTML = '<tr><td colspan="7" class="text-center py-6">Memuat...</td></tr>';
+            try {
+                const url = API_BASE + '?action=list_tagihan&sekolah_id=' + encodeURIComponent(state.sekolah_id) + (periode ? '&periode=' + encodeURIComponent(periode) : '') + (status ? '&status=' + encodeURIComponent(status) : '');
+                const res = await fetch(url);
+                const json = await res.json();
+                const rows = json.data || [];
+                if (rows.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="text-center py-6 text-gray-500">Tidak ada data</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = rows.map(t => `
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-3 text-sm">${escapeHtml(t.kode_tagihan)}</td>
+                        <td class="px-4 py-3 text-sm">${escapeHtml(t.nama_siswa || '-')}</td>
+                        <td class="px-4 py-3 text-sm">${escapeHtml(t.deskripsi || '')}</td>
+                        <td class="px-4 py-3 text-sm text-right font-medium">${formatRupiah(t.jumlah)}</td>
+                        <td class="px-4 py-3 text-sm">${t.due_date || '-'}</td>
+                        <td class="px-4 py-3"><span class="status-badge status-${t.status}">${t.status}</span></td>
+                        <td class="px-4 py-3 text-center">
+                            <button onclick="viewTagihan(${+t.id})" class="text-blue-600 hover:underline text-sm">Detail</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (e) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center py-6 text-red-600">Gagal memuat data</td></tr>';
+                console.error(e);
+            }
+        }
+
+        function showCreateTagihanForm() {
+            document.getElementById('modalCreateTagihan').classList.remove('hidden');
+        }
+
+        async function handleCreateTagihan(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+            data.sekolah_id = state.sekolah_id;
+
+            try {
+                const payload = new URLSearchParams();
+                for (const k in data) if (data[k] !== undefined && data[k] !== null) payload.append(k, data[k]);
+                const res = await fetch(API_BASE + '?action=create_tagihan', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: payload.toString() });
+                const j = await res.json();
+                if (!res.ok) throw new Error(j.error || j.message || 'Gagal membuat tagihan');
+                alert('Tagihan berhasil dibuat!');
+                closeModal('modalCreateTagihan');
+                loadTagihan();
+            } catch (error) {
+                alert('Gagal membuat tagihan: ' + error.message);
+            }
+        }
+
+        // Pembayaran Management
+        async function loadPembayaran() {
+            const tbody = document.getElementById('pembayaranTableBody');
+            tbody.innerHTML = '<tr><td colspan="7" class="text-center py-6">Memuat...</td></tr>';
+            try {
+                const url = API_BASE + '?action=list_pembayaran&sekolah_id=' + encodeURIComponent(state.sekolah_id) + '&limit=200';
+                const res = await fetch(url);
+                const j = await res.json();
+                const rows = j.data || [];
+                if (rows.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="text-center py-6 text-gray-500">Tidak ada pembayaran</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = rows.map(p => `
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-3 text-sm">${+p.id}</td>
+                        <td class="px-4 py-3 text-sm">${escapeHtml(p.kode_tagihan || '-')}</td>
+                        <td class="px-4 py-3 text-sm">${escapeHtml(p.metode || '-')}</td>
+                        <td class="px-4 py-3 text-sm text-right font-medium">${formatRupiah(p.jumlah)}</td>
+                        <td class="px-4 py-3 text-sm">${p.bukti ? `<a href="../uploads/bukti_pembayaran/${encodeURIComponent(p.bukti)}" target="_blank" class="text-blue-600 hover:underline">Lihat</a>` : '-'}</td>
+                        <td class="px-4 py-3"><span class="status-badge status-${p.status}">${p.status}</span></td>
+                        <td class="px-4 py-3 text-center">
+                            ${p.status === 'pending' ? `<button onclick="confirmPembayaran(${+p.id})" class="text-green-600 hover:underline text-sm">Konfirmasi</button>` : '-'}
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (e) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center py-6 text-red-600">Gagal memuat data</td></tr>';
+                console.error(e);
+            }
+        }
+
+        function showCreatePembayaranForm() {
+            document.getElementById('modalCreatePembayaran').classList.remove('hidden');
+        }
+
+        async function handleCreatePembayaran(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            formData.append('sekolah_id', state.sekolah_id);
+
+            try {
+                const res = await fetch(API_BASE + '?action=create_pembayaran', { method: 'POST', body: formData });
+                const j = await res.json();
+                if (!res.ok) throw new Error(j.error || j.message || 'Gagal input pembayaran');
+                alert('Pembayaran berhasil diinput!');
+                closeModal('modalCreatePembayaran');
+                loadPembayaran();
+                loadDashboard();
+            } catch (error) {
+                alert('Gagal input pembayaran: ' + error.message);
+            }
+        }
+
+        // Aset functions
+        function showCreateAsetForm(data = null) {
+            const modal = document.getElementById('modalCreateAset');
+            const form = document.getElementById('formCreateAset');
+            form.reset();
+            if (data) {
+                form.id.value = data.id;
+                form.kode_aset.value = data.kode_aset || '';
+                form.nama.value = data.nama || '';
+                form.kategori.value = data.kategori || '';
+                form.lokasi.value = data.lokasi || '';
+                form.kondisi.value = data.kondisi || '';
+                form.nilai_perolehan.value = data.nilai_perolehan || '';
+            }
+            modal.classList.remove('hidden');
+        }
+
+        async function loadAset() {
+            const tbody = document.getElementById('asetTableBody');
+            tbody.innerHTML = '<tr><td colspan="7" class="text-center py-6">Memuat...</td></tr>';
+            try {
+                const res = await fetch(API_BASE + '?action=list_aset&sekolah_id=' + encodeURIComponent(state.sekolah_id));
+                const j = await res.json();
+                const rows = j.data || [];
+                if (rows.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" class="text-center py-6 text-gray-500">Tidak ada aset</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = rows.map(r => `
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-3 text-sm">${+r.id}</td>
+                        <td class="px-4 py-3 text-sm">${escapeHtml(r.kode_aset || '')}</td>
+                        <td class="px-4 py-3 text-sm">${escapeHtml(r.nama || '')}</td>
+                        <td class="px-4 py-3 text-sm">${escapeHtml(r.kategori || '')}</td>
+                        <td class="px-4 py-3 text-sm">${escapeHtml(r.lokasi || '')}</td>
+                        <td class="px-4 py-3 text-sm text-right">${formatRupiah(r.nilai_perolehan || 0)}</td>
+                        <td class="px-4 py-3 text-center"><button data-id="${+r.id}" class="edit-aset-btn text-blue-600 hover:underline text-sm mr-2">Edit</button><button onclick="deleteAset(${+r.id})" class="text-red-600 hover:underline text-sm">Hapus</button></td>
+                    </tr>
+                `).join('');
+                // store rows for editing
+                state.lastAset = rows;
+                // attach edit listeners
+                tbody.querySelectorAll('.edit-aset-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const id = btn.dataset.id;
+                        const item = state.lastAset.find(x => String(x.id) === String(id));
+                        showCreateAsetForm(item || null);
+                    });
+                });
+            } catch (e) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center py-6 text-red-600">Gagal memuat data</td></tr>';
+                console.error(e);
+            }
+        }
+
+        async function handleCreateAset(e) {
+            e.preventDefault();
+            const form = e.target;
+            const formData = new FormData(form);
+            formData.append('sekolah_id', state.sekolah_id);
+            const id = formData.get('id');
+            try {
+                if (id) {
+                    const payload = new URLSearchParams();
+                    for (const [k,v] of formData.entries()) if (k !== 'id') payload.append(k, v);
+                    payload.append('id', id);
+                    const res = await fetch(API_BASE + '?action=update_aset', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: payload.toString() });
+                    const j = await res.json(); if (!res.ok) throw new Error(j.error || j.message);
+                } else {
+                    const payload = new URLSearchParams(); for (const [k,v] of formData.entries()) payload.append(k, v);
+                    const res = await fetch(API_BASE + '?action=create_aset', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: payload.toString() });
+                    const j = await res.json(); if (!res.ok) throw new Error(j.error || j.message);
+                }
+                closeModal('modalCreateAset'); loadAset();
+            } catch (e) { alert('Gagal menyimpan aset: ' + e.message); }
+        }
+
+        async function deleteAset(id) {
+            if (!confirm('Hapus aset #' + id + '?')) return;
+            try {
+                const payload = new URLSearchParams(); payload.append('id', id);
+                const res = await fetch(API_BASE + '?action=delete_aset', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: payload.toString() });
+                const j = await res.json(); if (!res.ok) throw new Error(j.error || j.message);
+                loadAset();
+            } catch (e) { alert('Gagal menghapus aset: ' + e.message); }
+        }
+
+        // RKAS functions
+        function showCreateRKASForm(data = null) {
+            const modal = document.getElementById('modalCreateRKAS');
+            const form = document.getElementById('formCreateRKAS');
+            form.reset();
+            if (data) {
+                form.id.value = data.id;
+                form.tahun.value = data.tahun || '';
+                form.anggaran_total.value = data.anggaran_total || '';
+                form.realisasi_total.value = data.realisasi_total || '';
+            }
+            modal.classList.remove('hidden');
+        }
+
+        async function loadRKAS() {
+            const tbody = document.getElementById('rkasTableBody');
+            tbody.innerHTML = '<tr><td colspan="5" class="text-center py-6">Memuat...</td></tr>';
+            try {
+                const res = await fetch(API_BASE + '?action=list_rkas&sekolah_id=' + encodeURIComponent(state.sekolah_id));
+                const j = await res.json(); const rows = j.data || [];
+                if (rows.length === 0) { tbody.innerHTML = '<tr><td colspan="5" class="text-center py-6 text-gray-500">Tidak ada data</td></tr>'; return; }
+                tbody.innerHTML = rows.map(r => `
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-3 text-sm">${+r.id}</td>
+                        <td class="px-4 py-3 text-sm">${escapeHtml(r.tahun)}</td>
+                        <td class="px-4 py-3 text-sm">${formatRupiah(r.anggaran_total || 0)}</td>
+                        <td class="px-4 py-3 text-sm">${formatRupiah(r.realisasi_total || 0)}</td>
+                        <td class="px-4 py-3 text-center"><button data-id="${+r.id}" class="edit-rkas-btn text-blue-600 hover:underline text-sm mr-2">Edit</button><button onclick="deleteRKAS(${+r.id})" class="text-red-600 hover:underline text-sm">Hapus</button></td>
+                    </tr>
+                `).join('');
+                // store rows and attach edit listeners
+                state.lastRKAS = rows;
+                tbody.querySelectorAll('.edit-rkas-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const id = btn.dataset.id;
+                        const item = state.lastRKAS.find(x => String(x.id) === String(id));
+                        showCreateRKASForm(item || null);
+                    });
+                });
+            } catch (e) { tbody.innerHTML = '<tr><td colspan="5" class="text-center py-6 text-red-600">Gagal memuat data</td></tr>'; console.error(e); }
+        }
+
+        async function handleCreateRKAS(e) {
+            e.preventDefault(); const form = e.target; const formData = new FormData(form); formData.append('sekolah_id', state.sekolah_id);
+            const id = formData.get('id');
+            try {
+                if (id) {
+                    const payload = new URLSearchParams(); for (const [k,v] of formData.entries()) if (k !== 'id') payload.append(k, v); payload.append('id', id);
+                    const res = await fetch(API_BASE + '?action=update_rkas', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: payload.toString() }); const j = await res.json(); if (!res.ok) throw new Error(j.error || j.message);
+                } else {
+                    const payload = new URLSearchParams(); for (const [k,v] of formData.entries()) payload.append(k, v);
+                    const res = await fetch(API_BASE + '?action=create_rkas', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: payload.toString() }); const j = await res.json(); if (!res.ok) throw new Error(j.error || j.message);
+                }
+                closeModal('modalCreateRKAS'); loadRKAS();
+            } catch (e) { alert('Gagal menyimpan RKAS: ' + e.message); }
+        }
+
+        async function deleteRKAS(id) {
+            if (!confirm('Hapus RKAS #' + id + '?')) return; try { const payload = new URLSearchParams(); payload.append('id', id); const res = await fetch(API_BASE + '?action=delete_rkas', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: payload.toString() }); const j = await res.json(); if (!res.ok) throw new Error(j.error || j.message); loadRKAS(); } catch (e) { alert('Gagal menghapus RKAS: ' + e.message); }
+        }
+
+        async function confirmPembayaran(id) {
+            if (!confirm('Konfirmasi pembayaran #' + id + '?')) return;
+            try {
+                const payload = new URLSearchParams();
+                payload.append('id', id);
+                const res = await fetch(API_BASE + '?action=confirm_pembayaran', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: payload.toString() });
+                const j = await res.json();
+                if (!res.ok) throw new Error(j.error || j.message || 'Gagal konfirmasi pembayaran');
+                alert('Pembayaran dikonfirmasi');
+                loadPembayaran();
+                loadDashboard();
+            } catch (e) {
+                alert('Gagal: ' + e.message);
+            }
+        }
+
+        // Laporan
+        async function loadLaporan() {
+            const mockSummary = [
+                { bulan: 'Januari 2025', tagihan: 4500000, terbayar: 3000000, persentase: 67 },
+                { bulan: 'Desember 2024', tagihan: 4500000, terbayar: 4200000, persentase: 93 }
+            ];
+
+            document.getElementById('monthlySummary').innerHTML = mockSummary.map(s => `
+                <div class="p-3 bg-gray-50 rounded">
+                    <div class="font-medium mb-2">${s.bulan}</div>
+                    <div class="text-sm text-gray-600">Tagihan: ${formatRupiah(s.tagihan)}</div>
+                    <div class="text-sm text-gray-600">Terbayar: ${formatRupiah(s.terbayar)}</div>
+                    <div class="mt-2 bg-gray-200 rounded-full h-2">
+                        <div class="bg-green-500 rounded-full h-2" style="width: ${s.persentase}%"></div>
+                    </div>
+                    <div class="text-xs text-gray-500 mt-1">${s.persentase}% terbayar</div>
+                </div>
+            `).join('');
+
+            const mockTop = [
+                { siswa: 'Ali bin Ahmad', kelas: '8A', tunggakan: 450000 },
+                { siswa: 'Budi Santoso', kelas: '8B', tunggakan: 300000 }
+            ];
+
+            document.getElementById('topUnpaid').innerHTML = mockTop.map(t => `
+                <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
+                    <div>
+                        <div class="font-medium">${t.siswa}</div>
+                        <div class="text-sm text-gray-600">Kelas ${t.kelas}</div>
+                    </div>
+                    <div class="text-right font-medium text-red-600">${formatRupiah(t.tunggakan)}</div>
+                </div>
+            `).join('');
+        }
+
+        // Helpers
+        function formatRupiah(amount) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(amount);
+        }
+
+        // Basic HTML escaper for simple values
+        function escapeHtml(str) {
+            if (str === null || str === undefined) return '';
+            return String(str).replace(/[&<>"'`]/g, function (s) {
+                return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;","`":"&#96;"})[s];
+            });
+        }
+
+        // Render a list of planning/budget items (RKJM/RKT/RKAS) as cards with toggleable details
+        function renderPlanList(items, containerId, typeLabel) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            if (!items || items.length === 0) {
+                container.innerHTML = '<div class="text-sm text-gray-500">Tidak ada ' + typeLabel + '</div>';
+                return;
+            }
+
+            container.innerHTML = items.map(it => {
+                const title = (it.tahun ? (it.tahun + ' • ') : '') + (it.nama || it.title || (typeLabel + ' #' + (it.id || '')));
+                const desc = it.deskripsi || it.keterangan || it.nama_kegiatan || '';
+                const anggaran = (it.anggaran_total || it.total_anggaran || it.anggaran) ? formatRupiah(it.anggaran_total || it.total_anggaran || it.anggaran) : '';
+                return `
+                    <div class="plan-card mb-3">
+                        <div class="card flex justify-between items-center">
+                            <div>
+                                <div class="font-medium">${title}</div>
+                                <div class="text-sm text-gray-600">${desc}</div>
+                            </div>
+                            <div class="text-right">
+                                ${anggaran ? `<div class="text-sm font-semibold mb-2">${anggaran}</div>` : ''}
+                                <button class="btn-secondary btn-toggle-plan text-sm">Detail</button>
+                            </div>
+                        </div>
+                        <div class="plan-detail hidden mt-2 p-3 bg-gray-50 rounded text-xs text-gray-700"><pre style="white-space:pre-wrap">${escapeHtml(JSON.stringify(it, null, 2))}</pre></div>
+                    </div>
+                `;
+            }).join('');
+
+            // attach toggle handlers
+            container.querySelectorAll('.btn-toggle-plan').forEach(btn => {
+                btn.addEventListener('click', (ev) => {
+                    const card = ev.target.closest('.plan-card');
+                    if (!card) return;
+                    const detail = card.querySelector('.plan-detail');
+                    if (detail) detail.classList.toggle('hidden');
+                });
+            });
+        }
+
+        // simple HTML escaper for JSON output in detail pane
+        function escapeHtml(str) {
+            return String(str).replace(/[&<>"']/g, function (s) {
+                return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"})[s];
+            });
+        }
+
+        // Render plan items as a table with aggregated totals and edit links
+        function renderPlanTableList(items, containerId, typeLabel, typeKey) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            if (!items || items.length === 0) {
+                container.innerHTML = '<div class="text-sm text-gray-500">Tidak ada ' + typeLabel + '</div>';
+                return;
+            }
+
+            const total = items.reduce((acc, it) => acc + parseFloat(it.anggaran_total || it.total_anggaran || it.anggaran || 0), 0);
+            let rows = items.map(it => {
+                const tahun = it.tahun || '';
+                const nama = it.nama || it.title || ('#' + (it.id || ''));
+                const desc = (it.deskripsi || it.keterangan || it.nama_kegiatan || '').replace(/</g,'&lt;');
+                const anggaran = it.anggaran_total || it.total_anggaran || it.anggaran || 0;
+                return `
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-3 py-2 text-sm">${tahun}</td>
+                        <td class="px-3 py-2 text-sm">${nama}</td>
+                        <td class="px-3 py-2 text-sm">${desc}</td>
+                        <td class="px-3 py-2 text-sm text-right font-medium">${formatRupiah(anggaran)}</td>
+                        <td class="px-3 py-2 text-center"><a href="#" class="text-blue-600 hover:underline plan-edit-link" data-type="${typeKey}" data-id="${it.id}">Edit</a></td>
+                    </tr>
+                `;
+            }).join('');
+
+            container.innerHTML = `
+                <div class="mb-2 text-sm">Total Anggaran ${typeLabel}: <strong>${formatRupiah(total)}</strong></div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50"><tr>
+                            <th class="px-3 py-2 text-left text-sm font-medium">Tahun</th>
+                            <th class="px-3 py-2 text-left text-sm font-medium">Nama</th>
+                            <th class="px-3 py-2 text-left text-sm font-medium">Deskripsi</th>
+                            <th class="px-3 py-2 text-right text-sm font-medium">Anggaran</th>
+                            <th class="px-3 py-2 text-center text-sm font-medium">Aksi</th>
+                        </tr></thead>
+                        <tbody>${rows}</tbody>
+                    </table>
+                </div>
+            `;
+
+            // attach edit link handlers
+            container.querySelectorAll('.plan-edit-link').forEach(a => {
+                a.addEventListener('click', (ev) => {
+                    ev.preventDefault();
+                    const id = a.dataset.id;
+                    const type = a.dataset.type || typeKey;
+                    openPlanEditor(type, id);
+                });
+            });
+        }
+
+        function openPlanEditor(type, id) {
+            const plans = state.lastPlans[type] || [];
+            const item = plans.find(p => String(p.id) === String(id));
+            state.editingPlan = { type, id };
+            document.getElementById('plan_type').value = type;
+            document.getElementById('plan_id').value = id;
+            if (item) {
+                document.getElementById('plan_tahun').value = item.tahun || '';
+                document.getElementById('plan_nama').value = item.nama || item.title || '';
+                document.getElementById('plan_deskripsi').value = item.deskripsi || item.keterangan || '';
+                document.getElementById('plan_anggaran').value = item.anggaran_total || item.total_anggaran || item.anggaran || '';
+            } else {
+                // fallback: clear fields
+                document.getElementById('plan_tahun').value = '';
+                document.getElementById('plan_nama').value = '';
+                document.getElementById('plan_deskripsi').value = '';
+                document.getElementById('plan_anggaran').value = '';
+            }
+            document.getElementById('planEditorTitle').textContent = `Edit ${type.toUpperCase()} — ID ${id}`;
+            document.getElementById('modalPlanEditor').classList.remove('hidden');
+        }
+
+        function closePlanEditor() {
+            document.getElementById('modalPlanEditor').classList.add('hidden');
+            state.editingPlan = null;
+        }
+
+        // handle plan editor form submit (optimistic update + API POST)
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('formPlanEditor');
+            if (form) {
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const fd = new FormData(form);
+                    const payload = Object.fromEntries(fd.entries());
+                    const type = payload.type;
+                    const id = payload.id;
+
+                    // optimistic update in state cache
+                    const list = state.lastPlans[type] || [];
+                    const idx = list.findIndex(p => String(p.id) === String(id));
+                    const updated = Object.assign({}, list[idx] || {}, {
+                        tahun: payload.tahun || '',
+                        nama: payload.nama || '',
+                        deskripsi: payload.deskripsi || '',
+                        anggaran_total: payload.anggaran_total || 0
+                    });
+                    if (idx >= 0) list[idx] = updated;
+                    else list.push(Object.assign({ id }, updated));
+                    state.lastPlans[type] = list;
+
+                    // re-render table
+                    renderPlanTableList(list, type === 'rkjm' ? 'rkjmList' : (type === 'rkt' ? 'rktList' : 'rkasList'), type.toUpperCase(), type);
+
+                    closePlanEditor();
+
+                    // attempt to persist to server (best-effort)
+                    try {
+                        await fetch(API_BASE + '?action=save_plan', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ type, id, data: updated })
+                        });
+                    } catch (e) {
+                        console.warn('Failed saving plan to server (ok if backend not implemented yet)', e);
+                    }
+                });
+            }
+        });
+
+        function closeModal(modalId) {
+            const el = document.getElementById(modalId);
+            if (el) el.classList.add('hidden');
+        }
+
+        function showError(elementId, message, timeout = 5000) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            el.textContent = message;
+            el.classList.remove('hidden');
+            if (timeout) {
+                setTimeout(() => {
+                    el.classList.add('hidden');
+                }, timeout);
+            }
+        }
+
+        function viewTagihan(id) {
+            alert('Detail tagihan ID: ' + id);
+        }
+
+        // School detail view for super admin (uses server-side aggregated endpoint)
+        async function viewSchool(id, name) {
+            document.getElementById('schoolDetailTitle').textContent = 'Sekolah: ' + name;
+            document.getElementById('schoolStudentsBody').innerHTML = '<tr><td colspan="5" class="text-gray-500">Memuat...</td></tr>';
+            document.getElementById('schoolStats').innerHTML = '';
+            document.getElementById('modalSchoolDetail').classList.remove('hidden');
+            try {
+                const res = await fetch(API_BASE + '?action=list_siswa_extended&sekolah_id=' + encodeURIComponent(id));
+                const json = await res.json();
+                if (!res.ok) {
+                    document.getElementById('schoolStudentsBody').innerHTML = '<tr><td colspan="5" class="text-red-600">' + (json.error || 'Gagal memuat data') + '</td></tr>';
+                    return;
+                }
+
+                const students = json.data || [];
+                if (students.length === 0) {
+                    document.getElementById('schoolStudentsBody').innerHTML = '<tr><td colspan="5" class="text-gray-500">Tidak ada siswa.</td></tr>';
+                } else {
+                    document.getElementById('schoolStudentsBody').innerHTML = students.map(s => `
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-4 py-2 text-sm">${s.nama}</td>
+                            <td class="px-4 py-2 text-sm">${s.kelas || '-'}</td>
+                            <td class="px-4 py-2 text-sm">${s.tahun_masuk || '-'}</td>
+                            <td class="px-4 py-2 text-sm text-right">${formatRupiah(parseFloat(s.tunggakan || 0))}</td>
+                            <td class="px-4 py-2 text-sm text-right">${formatRupiah(parseFloat(s.total_tagihan || s.totalTagihan || 0))}</td>
+                        </tr>
+                    `).join('');
+                }
+
+                // load RKJM/RKT/RKAS lists (if available)
+                (async () => {
+                    try {
+                        const [rkjmRes, rktRes, rkasRes] = await Promise.all([
+                            fetch(API_BASE + '?action=list_rkjm&sekolah_id=' + encodeURIComponent(id)),
+                            fetch(API_BASE + '?action=list_rkt&sekolah_id=' + encodeURIComponent(id)),
+                            fetch(API_BASE + '?action=list_rkas&sekolah_id=' + encodeURIComponent(id))
+                        ]);
+                        const rkjmJson = await rkjmRes.json();
+                        const rktJson = await rktRes.json();
+                        const rkasJson = await rkasRes.json();
+                        const rkjm = rkjmJson.data || [];
+                        const rkt = rktJson.data || [];
+                        const rkas = rkasJson.data || [];
+
+                        // cache plans for editor
+                        state.lastPlans.rkjm = rkjm;
+                        state.lastPlans.rkt = rkt;
+                        state.lastPlans.rkas = rkas;
+
+                        // render as tables with totals and edit links
+                        renderPlanTableList(rkjm, 'rkjmList', 'RKJM', 'rkjm');
+                        renderPlanTableList(rkt, 'rktList', 'RKT', 'rkt');
+                        renderPlanTableList(rkas, 'rkasList', 'RKAS', 'rkas');
+                    } catch (e) {
+                        console.error('Failed loading RKJM/RKT/RKAS', e);
+                        document.getElementById('rkjmList').innerHTML = '<div class="text-sm text-gray-500">Gagal memuat</div>';
+                        document.getElementById('rktList').innerHTML = '<div class="text-sm text-gray-500">Gagal memuat</div>';
+                        document.getElementById('rkasList').innerHTML = '<div class="text-sm text-gray-500">Gagal memuat</div>';
+                    }
+                })();
+
+                // aggregate totals
+                const totalTagihan = students.reduce((acc, s) => acc + parseFloat(s.total_tagihan || s.totalTagihan || 0), 0);
+                const totalPaid = students.reduce((acc, s) => acc + parseFloat(s.total_paid || s.totalPaid || 0), 0);
+                const totalUnpaid = students.reduce((acc, s) => acc + parseFloat(s.tunggakan || 0), 0);
+
+                const statsEl = document.getElementById('schoolStats');
+                statsEl.innerHTML = `
+                    <div class="card">Total Tagihan: ${formatRupiah(totalTagihan)}</div>
+                    <div class="card">Total Terbayar: ${formatRupiah(totalPaid)}</div>
+                    <div class="card">Belum Lunas: ${formatRupiah(totalUnpaid)}</div>
+                `;
+            } catch (e) {
+                document.getElementById('schoolStudentsBody').innerHTML = '<tr><td colspan="5" class="text-red-600">Gagal memuat data siswa.</td></tr>';
+                console.error(e);
+            }
+        }
+    </script>
+</body>
+</html>

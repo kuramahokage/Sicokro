@@ -1,0 +1,155 @@
+[19-Dec-2025 07:40:49 Europe/Berlin] list_siswa_extended error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 's.tahun_masuk' in 'field list'
+[19-Dec-2025 07:43:24 Europe/Berlin] DEBUG login: user not found for email=apitest local@local
+[19-Dec-2025 07:43:37 Europe/Berlin] DEBUG login: user found id=5 email=apitest+local@local
+[19-Dec-2025 07:43:37 Europe/Berlin] DEBUG login: hash_prefix=$2y$10$s.sHe
+[19-Dec-2025 07:43:37 Europe/Berlin] DEBUG login: password_verify => true
+[19-Dec-2025 07:45:18 Europe/Berlin] DEBUG login: user found id=5 email=apitest+local@local
+[19-Dec-2025 07:45:18 Europe/Berlin] DEBUG login: hash_prefix=$2y$10$s.sHe
+[19-Dec-2025 07:45:18 Europe/Berlin] DEBUG login: password_verify => true
+[19-Dec-2025 07:45:18 Europe/Berlin] List sekolah error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'kecamatan' in 'field list'
+[19-Dec-2025 07:45:36 Europe/Berlin] List sekolah error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'kecamatan' in 'field list'
+[19-Dec-2025 07:45:38 Europe/Berlin] List sekolah error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'kecamatan' in 'field list'
+[19-Dec-2025 07:46:09 Europe/Berlin] DEBUG login: user found id=1 email=admin@cokroaminoto.sch.id
+[19-Dec-2025 07:46:09 Europe/Berlin] DEBUG login: hash_prefix=superadmin12
+[19-Dec-2025 07:46:09 Europe/Berlin] DEBUG login: password_verify => false
+[19-Dec-2025 07:46:38 Europe/Berlin] DEBUG login: user found id=1 email=admin@cokroaminoto.sch.id
+[19-Dec-2025 07:46:38 Europe/Berlin] DEBUG login: hash_prefix=superadmin12
+[19-Dec-2025 07:46:38 Europe/Berlin] DEBUG login: password_verify => false
+[19-Dec-2025 07:46:44 Europe/Berlin] DEBUG login: user found id=1 email=admin@cokroaminoto.sch.id
+[19-Dec-2025 07:46:44 Europe/Berlin] DEBUG login: hash_prefix=superadmin12
+[19-Dec-2025 07:46:44 Europe/Berlin] DEBUG login: password_verify => false
+[19-Dec-2025 07:51:14 Europe/Berlin] DEBUG login: user found id=1 email=admin@cokroaminoto.sch.id
+[19-Dec-2025 07:51:14 Europe/Berlin] DEBUG login: hash_prefix=$2y$10$DdVTn
+[19-Dec-2025 07:51:14 Europe/Berlin] DEBUG login: password_verify => true
+[19-Dec-2025 07:51:14 Europe/Berlin] List sekolah error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'kecamatan' in 'field list'
+[19-Dec-2025 07:51:52 Europe/Berlin] List sekolah error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'kecamatan' in 'field list'
+[19-Dec-2025 07:52:04 Europe/Berlin] List sekolah error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'kecamatan' in 'field list'
+[19-Dec-2025 07:56:28 Europe/Berlin] List sekolah error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'kecamatan' in 'field list'
+[19-Dec-2025 07:56:29 Europe/Berlin] List sekolah error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'kecamatan' in 'field list'
+[19-Dec-2025 07:56:30 Europe/Berlin] List sekolah error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'kecamatan' in 'field list'
+[19-Dec-2025 07:56:31 Europe/Berlin] List sekolah error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'kecamatan' in 'field list'
+[19-Dec-2025 07:56:31 Europe/Berlin] List sekolah error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'kecamatan' in 'field list'
+[19-Dec-2025 07:56:31 Europe/Berlin] List sekolah error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'kecamatan' in 'field list'
+[19-Dec-2025 08:18:32 Europe/Berlin] List sekolah error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'kecamatan' in 'field list'
+[19-Dec-2025 08:18:33 Europe/Berlin] List sekolah error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'kecamatan' in 'field list'
+[19-Dec-2025 08:18:33 Europe/Berlin] List sekolah error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'kecamatan' in 'field list'
+[19-Dec-2025 08:18:34 Europe/Berlin] List sekolah error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'kecamatan' in 'field list'
+[19-Dec-2025 08:20:31 Europe/Berlin] List sekolah error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'kecamatan' in 'field list'
+[19-Dec-2025 08:20:34 Europe/Berlin] List sekolah error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'kecamatan' in 'field list'
+[19-Dec-2025 08:20:37 Europe/Berlin] DEBUG login: user found id=1 email=admin@cokroaminoto.sch.id
+[19-Dec-2025 08:20:37 Europe/Berlin] DEBUG login: hash_prefix=$2y$10$DdVTn
+[19-Dec-2025 08:20:37 Europe/Berlin] DEBUG login: password_verify => true
+[19-Dec-2025 08:20:37 Europe/Berlin] List sekolah error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'kecamatan' in 'field list'
+[19-Dec-2025 08:23:28 Europe/Berlin] List sekolah error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'kecamatan' in 'field list'
+[19-Dec-2025 08:27:15 Europe/Berlin] List sekolah error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'kecamatan' in 'field list'
+[19-Dec-2025 08:27:15 Europe/Berlin] List sekolah error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'kecamatan' in 'field list'
+[19-Dec-2025 08:27:16 Europe/Berlin] List sekolah error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'kecamatan' in 'field list'
+[19-Dec-2025 08:27:17 Europe/Berlin] List sekolah error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'kecamatan' in 'field list'
+[19-Dec-2025 08:27:18 Europe/Berlin] List sekolah error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'kecamatan' in 'field list'
+[19-Dec-2025 08:27:18 Europe/Berlin] List sekolah error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'kecamatan' in 'field list'
+[19-Dec-2025 08:28:43 Europe/Berlin] List sekolah error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'kecamatan' in 'field list'
+[19-Dec-2025 08:29:26 Europe/Berlin] Dashboard stats error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'periode_mulai' in 'where clause'
+[19-Dec-2025 08:29:26 Europe/Berlin] Dashboard stats error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'periode_mulai' in 'where clause'
+[19-Dec-2025 08:29:26 Europe/Berlin] Dashboard stats error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'periode_mulai' in 'where clause'
+[19-Dec-2025 08:29:29 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:29:30 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:29:31 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:29:32 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:29:33 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:29:34 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:29:35 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:29:36 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:29:37 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:29:39 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:29:40 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:29:40 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:29:41 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:29:41 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:29:41 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:31:08 Europe/Berlin] Dashboard stats error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'periode_mulai' in 'where clause'
+[19-Dec-2025 08:31:08 Europe/Berlin] Dashboard stats error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'periode_mulai' in 'where clause'
+[19-Dec-2025 08:31:08 Europe/Berlin] Dashboard stats error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'periode_mulai' in 'where clause'
+[19-Dec-2025 08:31:09 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:31:11 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:31:11 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:31:12 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:31:12 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:31:12 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:31:37 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:31:37 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:31:38 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:31:38 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:31:38 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:31:39 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:31:39 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:31:42 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:31:43 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:31:44 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:31:44 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:31:45 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:31:45 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:31:45 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:31:45 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:31:45 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:31:45 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:31:46 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:31:47 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:31:47 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:31:50 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:31:50 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:31:51 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:31:52 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:31:56 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:41:46 Europe/Berlin] Dashboard stats error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'periode_mulai' in 'where clause'
+[19-Dec-2025 08:41:46 Europe/Berlin] Dashboard stats error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'periode_mulai' in 'where clause'
+[19-Dec-2025 08:41:46 Europe/Berlin] Dashboard stats error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'periode_mulai' in 'where clause'
+[19-Dec-2025 08:41:47 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:41:53 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:42:06 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:44:36 Europe/Berlin] Dashboard stats error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'periode_mulai' in 'where clause'
+[19-Dec-2025 08:44:36 Europe/Berlin] Dashboard stats error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'periode_mulai' in 'where clause'
+[19-Dec-2025 08:44:36 Europe/Berlin] Dashboard stats error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'periode_mulai' in 'where clause'
+[19-Dec-2025 08:44:38 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:44:42 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:44:45 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:45:09 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:45:12 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:53:03 Europe/Berlin] Dashboard stats error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'periode_mulai' in 'where clause'
+[19-Dec-2025 08:53:03 Europe/Berlin] Dashboard stats error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'periode_mulai' in 'where clause'
+[19-Dec-2025 08:53:03 Europe/Berlin] Dashboard stats error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'periode_mulai' in 'where clause'
+[19-Dec-2025 08:53:04 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 08:53:07 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 09:19:32 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 09:19:44 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 09:19:47 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 10:04:28 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 10:20:03 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 10:21:49 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[19-Dec-2025 10:22:01 Europe/Berlin] Dashboard stats error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'periode_mulai' in 'where clause'
+[19-Dec-2025 10:22:01 Europe/Berlin] Dashboard stats error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'periode_mulai' in 'where clause'
+[19-Dec-2025 10:22:01 Europe/Berlin] Dashboard stats error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'periode_mulai' in 'where clause'
+[19-Dec-2025 10:22:02 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[26-Dec-2025 07:48:08 Europe/Berlin] DEBUG login: user found id=1 email=admin@cokroaminoto.sch.id
+[26-Dec-2025 07:48:08 Europe/Berlin] DEBUG login: hash_prefix=$2y$10$DdVTn
+[26-Dec-2025 07:48:08 Europe/Berlin] DEBUG login: password_verify => true
+[26-Dec-2025 07:48:08 Europe/Berlin] Dashboard stats error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'periode_mulai' in 'where clause'
+[26-Dec-2025 07:48:08 Europe/Berlin] Dashboard stats error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'periode_mulai' in 'where clause'
+[26-Dec-2025 07:48:08 Europe/Berlin] Dashboard stats error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'periode_mulai' in 'where clause'
+[26-Dec-2025 07:48:10 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[26-Dec-2025 07:48:13 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[26-Dec-2025 07:48:17 Europe/Berlin] list_rkjm error: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'tahun' in 'order clause'
+[26-Dec-2025 08:34:21 Europe/Berlin] DEBUG login: user found id=5 email=apitest+local@local
+[26-Dec-2025 08:34:21 Europe/Berlin] DEBUG login: hash_prefix=$2y$10$tG0yk
+[26-Dec-2025 08:34:21 Europe/Berlin] DEBUG login: password_verify => true
+[26-Dec-2025 08:36:13 Europe/Berlin] DEBUG login: user found id=5 email=apitest+local@local
+[26-Dec-2025 08:36:13 Europe/Berlin] DEBUG login: hash_prefix=$2y$10$tG0yk
+[26-Dec-2025 08:36:13 Europe/Berlin] DEBUG login: password_verify => true
+[26-Dec-2025 08:37:40 Europe/Berlin] DEBUG login: user found id=5 email=apitest+local@local
+[26-Dec-2025 08:37:40 Europe/Berlin] DEBUG login: hash_prefix=$2y$10$tG0yk
+[26-Dec-2025 08:37:40 Europe/Berlin] DEBUG login: password_verify => true
+[26-Dec-2025 08:37:40 Europe/Berlin] DEBUG login: user found id=6 email=apitest_noperm@local
+[26-Dec-2025 08:37:40 Europe/Berlin] DEBUG login: hash_prefix=$2y$10$MOftr
+[26-Dec-2025 08:37:40 Europe/Berlin] DEBUG login: password_verify => true
+[26-Dec-2025 08:37:40 Europe/Berlin] DEBUG login: user found id=5 email=apitest+local@local
+[26-Dec-2025 08:37:40 Europe/Berlin] DEBUG login: hash_prefix=$2y$10$tG0yk
+[26-Dec-2025 08:37:40 Europe/Berlin] DEBUG login: password_verify => true

@@ -1,0 +1,66 @@
+# SICOKRO .gitignore
+
+# Uploads - keep folder structure but ignore files
+public/uploads/*
+!public/uploads/.gitkeep
+!public/uploads/bukti_pembayaran/.gitkeep
+!public/uploads/dokumen_bantuan/.gitkeep
+!public/uploads/bukti_pengeluaran/.gitkeep
+
+# Local config (if you create one for local development)
+app/config.local.php
+
+# Logs
+logs/*.log
+!logs/.gitkeep
+
+# OS Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# IDE & Editors
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+.project
+.settings/
+.buildpath
+
+# PHP
+vendor/
+composer.lock
+composer.phar
+
+# Database backups
+sql/backups/*
+!sql/backups/.gitkeep
+
+# Temporary files
+*.tmp
+*.bak
+*.cache
+
+# Environment files (if using)
+.env
+.env.local
+.env.*.local
+
+# Node modules (if you add frontend build tools later)
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+
+# Build files (if needed later)
+dist/
+build/
